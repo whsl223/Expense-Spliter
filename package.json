@@ -1,0 +1,15 @@
+{
+    "description": "Expense Spliiter",
+    "scripts": {
+        "format": "prettier . --write"
+    },
+    "prettier": {
+        "trailingComma": "es5",
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true
+    },
+    "devDependencies": {
+        "prettier": "3.4.2"
+    }
+}
