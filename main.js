@@ -139,8 +139,8 @@ function updateUI() {
         <td>${e.payer}</td>
         <td>${e.splitWith.join(', ')}</td>
         <td>
-        <button class="btn btn-sm btn-secondary" onclick="showAddExpenseModal(${i})">Edit</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteExpense(${i})">Delete</button>
+        <button class="btn btn-sm btn-secondary" onclick="showAddExpenseModal(${i})">修改</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteExpense(${i})">刪除</button>
         </td>
       </tr>`
     })
