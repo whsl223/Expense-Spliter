@@ -13,9 +13,9 @@ function showAddPersonModal() {
 }
 
 function addPersonFromModal() {
-    const names = document
-        .getElementById('personInput')
-        .value.split(',')
+    const names = document.getElementById('personInput').value
+        .replace(/[，\/@#%^*.．！＠＃＄％︿＆＊（）]/g , ",")
+        .split(',')
         .map((n) => n.trim())
         .filter(Boolean)
     names.forEach((name) => peopleSet.add(name))
