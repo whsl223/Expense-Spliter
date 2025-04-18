@@ -101,6 +101,15 @@ function clearRecords() {
     updateUI()
 }
 
+function deleteExpense(index) {
+    if (confirm('確定要刪除這個項目嗎？')) {
+        expenseList.splice(index, 1)
+        saveToStorage()
+        updateUI()
+    }
+}
+
+
 function toggleSummaryView() {
     const table = document.querySelector('.summary-table')
     const cardContainer = document.getElementById('summaryCardContainer')
@@ -129,7 +138,10 @@ function updateUI() {
         <td>$${e.total.toFixed(2)}</td>
         <td>${e.payer}</td>
         <td>${e.splitWith.join(', ')}</td>
-        <td><button class="btn btn-sm btn-secondary" onclick="showAddExpenseModal(${i})">Edit</button></td>
+        <td>
+        <button class="btn btn-sm btn-secondary" onclick="showAddExpenseModal(${i})">Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteExpense(${i})">Delete</button>
+        </td>
       </tr>`
     })
 
