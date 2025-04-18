@@ -1,0 +1,16 @@
+.summary-table th,
+.summary-table td {
+    vertical-align: middle;
+}
+.essence-pay {
+    background-color: #f8d7da;
+    padding: 4px;
+    border-radius: 5px;
+    margin-bottom: 4px;
+}
+.essence-receive {
+    background-color: #d4edda;
+    padding: 4px;
+    border-radius: 5px;
+    margin-bottom: 4px;
+}
