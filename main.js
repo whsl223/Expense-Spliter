@@ -4,7 +4,7 @@
 // Get the full query string from the current URL
 const params = new URLSearchParams(window.location.search);
 const userkey = params.get("userkey");
-console.log(userkey)
+
 
 let peopleSet = []
 let expenseList = []
@@ -23,16 +23,15 @@ let db
     updateUI()
 })()
 
-function saveToStorage() {
-    console.log("Saving to storage...")
-    localStorage.setItem('people', JSON.stringify([...peopleSet]))
-    localStorage.setItem('expenses', JSON.stringify(expenseList))
-    saveToCloud()
-}
+// function saveToStorage() {
+//     console.log("Saving to storage...")
+//     localStorage.setItem('people', JSON.stringify([...peopleSet]))
+//     localStorage.setItem('expenses', JSON.stringify(expenseList))
+//     saveToCloud()
+// }
 
 
-async function saveToCloud() {
-    console.log(userkey)
+async function  saveToStorage() {
     const cloudData = [
         {
             userkey,
@@ -137,10 +136,11 @@ function saveExpense() {
 }
 
 function clearRecords() {
-    localStorage.clear()
-    peopleSet = new Set()
-    expenseList = []
-    updateUI()
+    window.location.href = window.location.origin + window.location.pathname;
+    // localStorage.clear()
+    // peopleSet = new Set()
+    // expenseList = []
+    // updateUI()
 }
 
 function deleteExpense(index) {
