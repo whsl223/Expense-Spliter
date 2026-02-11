@@ -1,11 +1,52 @@
-let peopleSet = new Set(JSON.parse(localStorage.getItem('people') || '[]'))
-let expenseList = JSON.parse(localStorage.getItem('expenses') || '[]')
+// let peopleSet = new Set(JSON.parse(localStorage.getItem('people') || '[]'))
+// let expenseList = JSON.parse(localStorage.getItem('expenses') || '[]')
+
+// Get the full query string from the current URL
+const params = new URLSearchParams(window.location.search);
+const userkey = params.get("userkey");
+console.log(userkey)
+
+let peopleSet = []
+let expenseList = []
 let currentSummaryView = 'table'
+// let userkey = "6Feb2026"
+
+let db
+
+
+(async function loadData(){
+    db = supabase.createClient('https://bhspntmbfoqspmoewtup.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoc3BudG1iZm9xc3Btb2V3dHVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MDI1MTIsImV4cCI6MjA4NjM3ODUxMn0.u2t_Ul4xbKUOwPZM5UAMLsU8WSTJnx3jvxMZevosP3I')
+    const response = await db.from('expense').select('*').eq('userkey', userkey)
+    const data = response.data[0]
+    peopleSet = data?.peopleset || []
+    expenseList = data?.transactions || []
+    updateUI()
+})()
 
 function saveToStorage() {
+    console.log("Saving to storage...")
     localStorage.setItem('people', JSON.stringify([...peopleSet]))
     localStorage.setItem('expenses', JSON.stringify(expenseList))
+    saveToCloud()
 }
+
+
+async function saveToCloud() {
+    const cloudData = [
+        {
+            userkey,
+            peopleset : [...peopleSet],
+            transactions : [...expenseList]
+        }
+    ]
+
+    const { data, error } = await db
+    .from('expense')
+    .upsert(cloudData)
+    .eq('userkey', userkey)
+    .select()
+}
+
 
 function showAddPersonModal() {
     document.getElementById('personInput').value = ''
@@ -139,8 +180,8 @@ function updateUI() {
         <td>${e.payer}</td>
         <td>${e.splitWith.join(', ')}</td>
         <td>
-        <button class="btn btn-sm btn-secondary" onclick="showAddExpenseModal(${i})">修改</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteExpense(${i})">刪除</button>
+        <button class="btn btn-sm btn-secondary" onclick="showAddExpenseModal(${i})">Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteExpense(${i})">Del</button>
         </td>
       </tr>`
     })
@@ -191,7 +232,7 @@ function updateUI() {
             receiveDivs = ''
         let receivedAmount = 0
         for (const [to, amount] of Object.entries(netSettled[person])) {
-            payDivs += `<div class='essence-pay'>Pay $${amount.toFixed(2)} to ${to}</div>`
+            payDivs += `<div class='essence-pay'> ${person} Pay $${amount.toFixed(2)} to ${to}</div>`
         }
         for (const [from, targets] of Object.entries(netSettled)) {
             if (targets[person]) {
@@ -210,15 +251,15 @@ function updateUI() {
           <table class="table table-bordered align-middle m-0">
             <tbody>
               <tr>
-                <td class="fw-bold text-end">個人洗費</td>
+                <td class="fw-bold text-end">$1</td>
                 <td>${owed.toFixed(2)}</td>
               </tr>
               <tr>
-                <td class="fw-bold text-end">淨額</td>
+                <td class="fw-bold text-end">$2</td>
                 <td>${net.toFixed(2)}</td>
               </tr>
               <tr>
-                <td class="fw-bold text-end">合計</td>
+                <td class="fw-bold text-end">$3</td>
                 <td class=>${(owed + net).toFixed(2)}</td>
               </tr>
             </tbody>
@@ -270,15 +311,15 @@ function updateUI() {
             <table class="table table-bordered text-center align-middle">
               <tbody>
                 <tr>
-                  <td>個人洗費</td>
+                  <td>$1</td>
                   <td>${owed.toFixed(2)}</td>
                 </tr>
                 <tr>
-                  <td>淨額</td>
+                  <td>$2</td>
                   <td>${net.toFixed(2)}</td>
                 </tr>
                 <tr>
-                  <td>合計</td>
+                  <td>$3</td>
                   <td>${(owed + net).toFixed(2)}</td>
                 </tr>
               </tbody>
@@ -303,7 +344,7 @@ function updateUI() {
     function clearButtonActiveStyles() {
         personButtonsContainer.querySelectorAll('button').forEach((btn) => {
             btn.classList.remove('btn-primary', 'text-white')
-            if (btn.textContent === '顯示全部') {
+            if (btn.textContent === 'Show All') {
                 btn.classList.remove('btn-outline-primary')
                 btn.classList.add('btn-outline-primary')
             } else {
@@ -315,7 +356,7 @@ function updateUI() {
 
     showAllButton = document.createElement('button')
     showAllButton.className = 'btn btn-outline-primary'
-    showAllButton.textContent = '顯示全部'
+    showAllButton.textContent = 'Show All'
     showAllButton.onclick = () => {
         document
             .querySelectorAll('#summaryBody tr.person')
@@ -363,6 +404,12 @@ function updateUI() {
     // Initially mark Show All as active
 
     showAllButton.classList.add('btn-primary', 'text-white')
-}
+
+
+    const tips = document.querySelector('#tips')
+    const pays = document.querySelectorAll('.essence-pay')
+    //console.log(Array.from(pays).map((el) => `<div>${el.textContent}</div>`).splice(0, pays.length/2))
+    tips.innerHTML = Array.from(pays).map((el) => `<div>${el.textContent}</div>`).splice(0, pays.length/2).join('')
+    }
 
 updateUI()

@@ -12,30 +12,36 @@
     </head>
     <body>
         <div class="container my-4">
-            <h1 class="text-center mb-4">找數</h1>
+            <h1 class="text-center mb-4">Bill Splitter</h1>
             <!-- Control Buttons -->
             <div class="mb-3 d-flex gap-2">
                 <button class="btn btn-primary" onclick="showAddPersonModal()">
-                    添加人物
+                    Add Person
                 </button>
                 <button class="btn btn-success" onclick="showAddExpenseModal()">
-                    添加項目
+                    Add Item
                 </button>
+                <!-- <button class="btn btn-danger" onclick="" disabled>
+                    Load Records
+                </button> -->
                 <button class="btn btn-danger" onclick="clearRecords()">
-                    清除記錄
+                    Clear Records
                 </button>
+
             </div>
+
+        
             <!-- Expense Table -->
-            <h4>支出項目</h4>
+            <h4>Items</h4>
             <table class="table table-bordered" id="expenseTable">
                 <thead class="table-light">
                     <tr class="text-center">
-                        <th>編號</th>
-                        <th>項目</th>
-                        <th>總額</th>
-                        <th>付款人</th>
-                        <th>分帳對象</th>
-                        <th>操作</th>
+                        <th>No.</th>
+                        <th>Item</th>
+                        <th>Amount</th>
+                        <th>Payer</th>
+                        <th>Co-payers</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="expenseTableBody"></tbody>
@@ -43,12 +49,12 @@
 
             <!-- Summary -->
             <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span>總結</span>
+                <span>Summary</span>
                 <button
                     class="toggleBtn btn btn-outline-primary"
                     onclick="toggleSummaryView()"
                 >
-                    切換顯示方式
+                    Toggle Display Mode
                 </button>
             </h4>
             <div class="mb-2 p-1">
@@ -59,11 +65,11 @@
             <table class="table table-bordered summary-table">
                 <thead>
                     <tr class="text-center">
-                        <th>人</th>
-                        <th>已支付</th>
-                        <th>明細</th>
-                        <th>需支付</th>
-                        <th>收款</th>
+                        <th>Person</th>
+                        <th>Paid</th>
+                        <th>Desc. ($1 + $2 = $3)</th>
+                        <th>Pay</th>
+                        <th>Receive</th>
                     </tr>
                 </thead>
                 <tbody id="summaryBody"></tbody>
@@ -77,7 +83,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">修改項目</h5>
+                            <h5 class="modal-title">Edit</h5>
                             <button
                                 type="button"
                                 class="btn-close"
@@ -88,7 +94,7 @@
                             <input type="hidden" id="editingExpenseIndex" />
                             <div class="mb-2">
                                 <label for="expenseNameInput" class="form-label"
-                                    >項目</label
+                                    >Item</label
                                 >
                                 <input
                                     class="form-control"
@@ -100,7 +106,7 @@
                                 <label
                                     for="expenseAmountInput"
                                     class="form-label"
-                                    >總額</label
+                                    >Total</label
                                 >
                                 <input
                                     class="form-control"
@@ -110,14 +116,14 @@
                                 />
                             </div>
                             <div class="mb-2">
-                                <label class="form-label">付款人</label>
+                                <label class="form-label">Payer</label>
                                 <div
                                     id="payerRadioGroup"
                                     class="d-flex flex-wrap gap-2"
                                 ></div>
                             </div>
                             <div class="mb-2">
-                                <label class="form-label">分帳對象</label>
+                                <label class="form-label">Co-payers</label>
                                 <div
                                     id="splitWithCheckboxGroup"
                                     class="d-flex flex-wrap gap-2"
@@ -129,7 +135,7 @@
                                 class="btn btn-primary"
                                 onclick="saveExpense()"
                             >
-                                確定
+                                Confirm
                             </button>
                         </div>
                     </div>
@@ -141,7 +147,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">增加人物</h5>
+                            <h5 class="modal-title">Add Person</h5>
                             <button
                                 type="button"
                                 class="btn-close"
@@ -150,7 +156,7 @@
                         </div>
                         <div class="modal-body">
                             <label for="personInput" class="form-label"
-                                >請輸入名稱 (以逗號分隔)</label
+                                >Enter Name</label
                             >
                             <input
                                 id="personInput"
@@ -163,15 +169,17 @@
                                 class="btn btn-primary"
                                 onclick="addPersonFromModal()"
                             >
-                                添加
+                                Add
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
+            <div id="tips">123</div>
         </div>
-
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <script src="main.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
+
