@@ -241,7 +241,11 @@ function updateUI() {
                 receivedAmount += targets[person]
             }
         }
-        let isValid = paid == owed + net
+        // let isValid = paid == 0 ? paid == owed + net : paid / (owed + net) == 1
+let ratio = paid / (owed + net);
+let isValid = paid === 0 
+  ? paid === owed + net 
+  : Math.round(ratio * 100) / 100 === 1; // round to 2 decimals
 
         summaryBody.innerHTML += `
     <tr class="person">
@@ -272,7 +276,7 @@ function updateUI() {
       </td>
       <td class="text-center">${payDivs || ''}</td>
       <td class="text-start">
-        ${receivedAmount ? `<div class="text-success fw-bold">總共收: $${receivedAmount.toFixed(2)}</div>` : ''}
+        ${receivedAmount ? `<div class="text-success fw-bold">Total: $${receivedAmount.toFixed(2)}</div>` : ''}
         ${receiveDivs || ''}
       </td>
     </tr>`
@@ -407,10 +411,10 @@ function updateUI() {
     showAllButton.classList.add('btn-primary', 'text-white')
 
 
-    const tips = document.querySelector('#tips')
-    const pays = document.querySelectorAll('.essence-pay')
-    //console.log(Array.from(pays).map((el) => `<div>${el.textContent}</div>`).splice(0, pays.length/2))
-    tips.innerHTML = Array.from(pays).map((el) => `<div>${el.textContent}</div>`).splice(0, pays.length/2).join('')
+    // const tips = document.querySelector('#tips')
+    // const pays = document.querySelectorAll('.essence-pay')
+    // //console.log(Array.from(pays).map((el) => `<div>${el.textContent}</div>`).splice(0, pays.length/2))
+    // tips.innerHTML = Array.from(pays).map((el) => `<div>${el.textContent}</div>`).splice(0, pays.length/2).join('')
     }
 
 updateUI()
