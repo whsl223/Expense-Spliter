@@ -32,6 +32,7 @@ function saveToStorage() {
 
 
 async function saveToCloud() {
+    console.log(userkey)
     const cloudData = [
         {
             userkey,
@@ -42,7 +43,7 @@ async function saveToCloud() {
 
     const { data, error } = await db
     .from('expense')
-    .upsert(cloudData)
+    .upsert(cloudData, { onConflict: 'userkey' })
     .eq('userkey', userkey)
     .select()
 }
